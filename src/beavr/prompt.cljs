@@ -1,31 +1,31 @@
 (ns beavr.prompt
-  (:require [beavr.shell :as sh]
-            [clojure.string :as str]
-            [quark.debug :as debug]
+  (:require [beavr.ansi :as ansi]
             [beavr.options :as options]
-            [beavr.ansi :as ansi]
-            [beavr.text :as text]))
+            [beavr.shell :as sh]
+            [beavr.text :as text]
+            [clojure.string :as str]
+            [quark.debug :as debug]))
 
 (def ^:private readline-sync (js/require "readline-sync"))
 
 (defn quoted
-    [x]
+  [x]
   (str "\"" x "\""))
 
 (defn command-str
   [script props]
   (str/join
-    " "
-    (into [script]
-          (map
-            (fn [[k v]]
-              (if v
-                (str (-> k name options/with-double-dashes) "=" (quoted v))
-                (-> k name options/with-double-dashes)))
-            props))))
+   " "
+   (into [script]
+         (map
+          (fn [[k v]]
+            (if v
+              (str (-> k name options/with-double-dashes) "=" (quoted v))
+              (-> k name options/with-double-dashes)))
+          props))))
 
-(defn fzf
-  [coll field header]
+(defn fzf!
+  [coll field]
   (cond
     (not (some-> coll seq))
     nil
@@ -36,19 +36,19 @@
     :else
     (let [prompt-str (text/with-leading-space field)
           props {:height 10
-                  :prompt prompt-str
+                 :prompt prompt-str
                   ; :header header
-                  :reverse nil
-                  :inline-info nil}
+                 :reverse nil
+                 :inline-info nil}
           fzf (command-str "fzf" props)
-                cmd (str "echo \"" (str/join "\n" coll) "\" | " fzf)
+          cmd (str "echo \"" (str/join "\n" coll) "\" | " fzf)
           opts #js {:stdio #js ["inherit" "pipe" "inherit"] :shell true}]
-            (sh/sh cmd opts))))
+      (sh/sh cmd opts))))
 
-(defn read
+(defn read!
   [field]
   (let [result (.question readline-sync (str ansi/light-blue field ansi/reset " "))]
     (.write sh/stdout "\033[1A")
-   (.clearLine sh/stdout )
-   (.cursorTo sh/stdout 0)
+    (.clearLine sh/stdout)
+    (.cursorTo sh/stdout 0)
     result))

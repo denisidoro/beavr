@@ -1,43 +1,52 @@
 (ns beavr.suggestions
   (:require [beavr.layout :as layout]
             [beavr.options :as options]
-            [quark.collection.map :as map]
-            [beavr.text :as text]))
+            [beavr.text :as text]
+            [goog.string :as gstr]
+            [goog.string.format]
+            [quark.debug :as debug]))
 
 (defn based-on-path
   [path layout]
   (let [path-count (count path)]
     (->> layout
          (drop path-count)
-first
+         first
          layout/elem-names)))
 
-(defn with-description
-  [options x]
-  (if (layout/dashed? x)
-    (str x ";" (-> options
-                      (get (options/without-dashes x))
-                      :description))
-    x))
-
-(defn raw-suggestions
+(defn raw-suggestions!
   [layouts context field path]
   (case  field
     nil (mapcat (partial based-on-path path) layouts)
     "<x>" [::number]
     "<y>" [::number]
-    ["lorem" "ipsum" "dolor"] ))
+    ["lorem" "ipsum" "dolor"]))
 
 (defn without-filled-options
   [context suggestions]
   (let [keyset (-> context keys set)]
-    (filter #(-> % text/first-word keyset not) suggestions)))
+    (filter #(-> % text/first-column keyset not) suggestions)))
 
-(defn find-suggestions
-  [options possible-layouts context field path]
-  (as-> (raw-suggestions possible-layouts context field path) it
-       (without-filled-options context it)
-        ;            (map (partial with-description options) it)
-        (set it)
-        ;(concat it ["TERMINATE"])
-        ))
+(defn with-terminate-action
+  [suggestions]
+  (concat suggestions ["TERMINATE"]))
+
+(defn find-suggestions!
+  [possible-layouts context field path]
+  (->> (raw-suggestions! possible-layouts context field path)
+       (without-filled-options context)
+       set
+       with-terminate-action))
+
+(defn with-comments
+  [descriptions suggestions]
+  (let [comments (map (partial get descriptions) suggestions)
+        max-length (->> suggestions (map count) (apply max))
+        length (+ max-length 2)
+        format-str (str "%-" length "s")
+        format #(gstr/format format-str %)]
+    (map
+      (fn [suggestion comment]
+        (str (format suggestion) comment))
+      suggestions
+      comments)))

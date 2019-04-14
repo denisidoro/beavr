@@ -1,14 +1,14 @@
 (ns beavr.layout
   (:require [clojure.string :as str]
-            [quark.collection.seq :as seq] ))
+            [quark.collection.seq :as seq]))
 
 (defn elem-name
-    [x]
+  [x]
   (let [name (get-in x [:elem :name])
         option? (= "Option" (get-in x [:elem :type]))]
-        (if option?
-          (str "--" name)
-          name)) )
+    (if option?
+      (str "--" name)
+      name)))
 
 (defn elem-names
   [{:keys [type] :as x}]
@@ -30,15 +30,15 @@
   (loop [[p & other-path] path
          [l & other-layout] layout]
     (let [elem-set (some->> l elem-names (keep identity) set)]
-    (cond
-      (not p) true
-      (not l) false
-      (elem-set p) (recur other-path other-layout)
-      (some->> elem-set seq (some positional-argument?)) (recur other-path other-layout)
-      :else false))))
+      (cond
+        (not p) true
+        (not l) false
+        (elem-set p) (recur other-path other-layout)
+        (some->> elem-set seq (some positional-argument?)) (recur other-path other-layout)
+        :else false))))
 
 (defn possible-layouts
   [layouts path]
-    (->> layouts
-         (mapcat #(filter (partial possible? path) %))
-         vec))
+  (->> layouts
+       (mapcat #(filter (partial possible? path) %))
+       vec))

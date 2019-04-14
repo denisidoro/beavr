@@ -1,7 +1,7 @@
-(ns beavr.fixtures )
+(ns beavr.fixtures)
 
 (def docstring
-"Naval Fate.
+  "Naval Fate.
 
 Usage:
   naval_fate ship new <name>...

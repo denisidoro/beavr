@@ -1,5 +1,5 @@
 (ns beavr.shell
-  (:require [clojure.string :as str] ))
+  (:require [clojure.string :as str]))
 
 (def ^:private proc (js/require "child_process"))
 (def process (js/require "process"))
@@ -8,7 +8,7 @@
 
 (defn sh
   ([cmd]
-    (sh cmd #js {}))
+   (sh cmd #js {}))
   ([cmd opts]
    (-> proc
        (.spawnSync cmd opts)

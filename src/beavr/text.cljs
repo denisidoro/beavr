@@ -7,12 +7,10 @@
        str/split-lines
        (filter #(str/includes? % substr))))
 
-(defn first-word
-  ([text]
-    (first-word text #";"))
-  ([text ifs]
-   (-> (str/split text ifs)
-       first)))
+(defn first-column
+  [x]
+  (->> (str/split x "  ")
+       first))
 
 (defn with-leading-space
   [x]
