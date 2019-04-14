@@ -1,0 +1,22 @@
+{
+  "name": "beavr",
+  "version": "0.1.0",
+  "private": "true",
+  "engines": {
+    "node": "6.x"
+  },
+  "main": "server.js",
+  "dependencies": {
+    "neodoc": "^2.0.2"
+  },
+  "devDependencies": {
+    "source-map-support": "^0.4.15",
+    "ws": "^0.8.1"
+  },
+  "description": "1. `lein figwheel` 2. (In another window) `node target\\js\\compiled\\docli.js ...`",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
