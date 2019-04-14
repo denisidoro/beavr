@@ -42,4 +42,4 @@
                    :source-paths ["src" "dev"]
                    :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}}}
 
-  :cljfmt {:indents {flow [[:block 2]]}} )
+  :cljfmt {:indents {flow [[:block 2]]}})
