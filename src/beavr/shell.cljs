@@ -2,6 +2,9 @@
   (:require [clojure.string :as str] ))
 
 (def ^:private proc (js/require "child_process"))
+(def process (js/require "process"))
+(def stdout (.-stdout process))
+(def stdin (.-stdin process))
 
 (defn sh
   ([cmd]

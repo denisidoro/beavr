@@ -13,3 +13,7 @@
   ([text ifs]
    (-> (str/split text ifs)
        first)))
+
+(defn with-leading-space
+  [x]
+  (str x " "))

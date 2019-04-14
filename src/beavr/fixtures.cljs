@@ -9,8 +9,6 @@ Usage:
   naval_fate ship shoot <x> <y>
   naval_fate ship (set|remove) <x> <y> [--moored|--drifting]
   naval_fate mine (set|remove) <x> <y> [--moored|--drifting]
-  naval_fate -h | --help
-  naval_fate --version
 
 Options:
   -h --help     Show this screen.

@@ -22,9 +22,11 @@ first
 
 (defn raw-suggestions
   [layouts context field path]
-  (if field
-    ["lorem" "ipsum" "dolor"]
-    (mapcat (partial based-on-path path) layouts)))
+  (case  field
+    nil (mapcat (partial based-on-path path) layouts)
+    "<x>" [::number]
+    "<y>" [::number]
+    ["lorem" "ipsum" "dolor"] ))
 
 (defn without-filled-options
   [context suggestions]
@@ -35,5 +37,7 @@ first
   [options possible-layouts context field path]
   (as-> (raw-suggestions possible-layouts context field path) it
        (without-filled-options context it)
-                           (map (partial with-description options) it)
-       (concat it ["TERMINATE"])))
+        ;            (map (partial with-description options) it)
+        (set it)
+        ;(concat it ["TERMINATE"])
+        ))

@@ -3,13 +3,14 @@
             [beavr.doc :as doc]
             [clojure.string :as str]
             [beavr.fixtures :as fixtures]
-            [beavr.fzf :as fzf]
+            [beavr.prompt :as prompt]
             [beavr.suggestions :as suggestions]
             [beavr.layout :as layout]
             [cljs.pprint :as pprint]
             [beavr.text :as text]
             [beavr.options :as options]
-            [quark.debug :as debug]))
+            [quark.debug :as debug]
+            [beavr.ansi :as ansi]))
 
 (nodejs/enable-util-print!)
 
@@ -17,17 +18,18 @@
   [{:keys [layouts options]}]
   (loop [context {}
          field nil
-         path ["ship"]]
+         path []]
     (let [debug {:path path
                  :field field
                  :context context}
-          _ (debug/tap debug)
           possible-layouts (layout/possible-layouts layouts path)
           suggestions (suggestions/find-suggestions options possible-layouts context field path)
           prompt-str  (some-> field text/first-word)
           header (str/join " " path)
-          value (-> (fzf/prompt suggestions prompt-str header)
-                    text/first-word)
+          value (if (-> suggestions first keyword?)
+                  (prompt/read prompt-str)
+                    (-> (prompt/fzf suggestions prompt-str header)
+                                          text/first-word) )
           dashed? (some-> value layout/dashed?)
           dashed-with-arg? (and dashed? (-> options (get (options/without-dashes value)) :argument))
           positional? (some-> value layout/positional-argument?)
@@ -45,4 +47,15 @@
        myloop
        pprint/pprint))
 
+(defn play
+  []
+  (-> (str/join "\n"
+                [ (str ansi/cyan "cyan" ansi/reset)
+                 (str ansi/light-blue "light-blue" ansi/reset)
+                 (str ansi/light-cyan "light-cyan" ansi/reset)
+                 (str ansi/blue "blue" ansi/reset)])
+      println)
+  (-main))
+
 (set! *main-cli-fn* -main)
+;(set! *main-cli-fn* play)
