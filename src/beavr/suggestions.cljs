@@ -46,7 +46,7 @@
         format-str (str "%-" length "s")
         format #(gstr/format format-str %)]
     (map
-      (fn [suggestion comment]
-        (str (format suggestion) comment))
-      suggestions
-      comments)))
+     (fn [suggestion comment]
+       (str (format suggestion) comment))
+     suggestions
+     comments)))

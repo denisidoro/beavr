@@ -27,7 +27,7 @@
           suggestions      (suggestions/find-suggestions! possible-layouts context field path)
           prompt-str       (some-> field text/first-column)
           header           (str/join " " path)
-          free-input?      (-> suggestions first keyword? )
+          free-input?      (-> suggestions first keyword?)
           suggestions+     (when-not free-input?
                              (suggestions/with-comments descriptions suggestions))
           value            (if free-input?

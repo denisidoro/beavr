@@ -1,8 +1,8 @@
 (ns beavr.doc
   (:require [beavr.options :as options]
-            [quark.collection.map :as map]
             [beavr.text :as text]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [quark.collection.map :as map]))
 
 (def neodoc (js/require "neodoc"))
 
