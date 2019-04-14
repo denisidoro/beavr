@@ -8,7 +8,9 @@
                  [org.clojure/clojurescript "1.9.908"]]
 
   :plugins [[lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]
-            [lein-figwheel "0.5.13"]]
+            [lein-figwheel "0.5.13"]
+            [lein-cljfmt "0.5.7"]
+            [lein-nsorg "0.2.0"]]
 
   :source-paths ["src"]
 
@@ -38,4 +40,26 @@
   :profiles {:dev {:dependencies [[figwheel-sidecar "0.5.13"]
                                   [com.cemerick/piggieback "0.2.2"]]
                    :source-paths ["src" "dev"]
-                   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}}})
+                   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}}}
+
+  :cljfmt {:indents {flow               [[:block 1]]
+                     facts              [[:block 1]]
+                     idempotent-start   [[:block 1]]
+                     idempotent-stop    [[:block 1]]
+                     fact               [[:block 1]]
+                     non-test-action    [[:inner 0]]
+                     as-customer        [[:block 1]]
+                     as-of              [[:block 1]]
+                     assoc-if           [[:block 1]]
+                     let-entities       [[:block 2]]
+                     provided           [[:inner 0]]
+                     tabular            [[:inner 0]]
+                     try-type           [[:block 0]]
+                     with-fn-validation [[:block 0]]
+                     embeds             [[:block 0]]
+                     with-responses     [[:block 0]]
+                     defint             [[:block 0]]
+                     with-scopes        [[:block 1]]
+                     some-with-open     [[:block 1]]
+                     let-flow           [[:block 1]]
+                     defhandler         [[:block 2]]}} )
