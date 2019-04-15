@@ -8,10 +8,6 @@
 
 (def ^:private readline-sync (js/require "readline-sync"))
 
-(defn quoted
-  [x]
-  (str "\"" x "\""))
-
 (defn command-str
   [script props]
   (str/join
@@ -20,7 +16,7 @@
          (map
           (fn [[k v]]
             (if v
-              (str (-> k name options/with-double-dashes) "=" (quoted v))
+              (str (-> k name options/with-double-dashes) "=" (text/quoted v))
               (-> k name options/with-double-dashes)))
           props))))
 

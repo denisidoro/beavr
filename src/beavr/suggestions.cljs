@@ -1,10 +1,11 @@
 (ns beavr.suggestions
   (:require [beavr.layout :as layout]
-            [beavr.options :as options]
             [beavr.text :as text]
             [goog.string :as gstr]
             [goog.string.format]
             [quark.debug :as debug]))
+
+(def ^:private ^:const terminate "TERMINATE")
 
 (defn based-on-path
   [path layout]
@@ -29,7 +30,9 @@
 
 (defn with-terminate-action
   [suggestions]
-  (concat suggestions ["TERMINATE"]))
+  (if (every? layout/dashed? suggestions)
+    (concat suggestions [terminate])
+    suggestions))
 
 (defn find-suggestions!
   [possible-layouts context field path]
@@ -42,7 +45,7 @@
   [descriptions suggestions]
   (let [comments (map (partial get descriptions) suggestions)
         max-length (->> suggestions (map count) (apply max))
-        length (+ max-length 2)
+        length (+ max-length 6)
         format-str (str "%-" length "s")
         format #(gstr/format format-str %)]
     (map
