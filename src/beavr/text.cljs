@@ -15,3 +15,11 @@
 (defn with-leading-space
   [x]
   (str x " "))
+
+(defn quoted
+  [x]
+  (let [x' (str x)]
+    (if (str/includes? x' " ")
+      (str "\"" x' "\"")
+      x')))
+

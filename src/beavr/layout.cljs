@@ -4,7 +4,7 @@
 
 (defn elem-name
   [x]
-  (let [name (get-in x [:elem :name])
+  (let [name    (get-in x [:elem :name])
         option? (= "Option" (get-in x [:elem :type]))]
     (if option?
       (str "--" name)
@@ -19,11 +19,13 @@
 
 (defn positional-argument?
   [x]
-  (str/starts-with? x "<"))
+  (and (string? x)
+       (str/starts-with? x "<")))
 
 (defn dashed?
   [x]
-  (str/starts-with? x "-"))
+  (and (string? x)
+       (str/starts-with? x "-")))
 
 (defn possible?
   [path layout]
