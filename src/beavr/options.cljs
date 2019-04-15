@@ -17,12 +17,3 @@
          set
          (map (fn [{:keys [name] :as o}] [name o]))
          (into {}))))
-
-(defn with-double-dashes
-  [x]
-  (str "--" x))
-
-(defn without-dashes
-  [x]
-  (str/replace x #"\-" ""))
-

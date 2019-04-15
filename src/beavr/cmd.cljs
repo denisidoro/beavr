@@ -2,7 +2,8 @@
   (:require [beavr.layout :as layout]
             [beavr.text :as text]
             [clojure.string :as str]
-            [quark.collection.map :as map]))
+            [quark.collection.map :as map]
+            [beavr.argument :as arg]))
 
 (defn ^:private context-kv->text
   [[k v]]
@@ -13,5 +14,5 @@
 (defn build-final-cmd
   [context path]
   (let [path-elems    (map text/quoted path)
-        context-elems (->> context (map/filter-keys layout/dashed?) (map context-kv->text))]
+        context-elems (->> context (map/filter-keys arg/dashed?) (map context-kv->text))]
     (str/join " " (concat path-elems context-elems))))

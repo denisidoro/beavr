@@ -3,7 +3,11 @@
             [beavr.text :as text]
             [goog.string :as gstr]
             [goog.string.format]
-            [quark.debug :as debug]))
+            [quark.debug :as debug]
+            [beavr.shell :as sh]
+            [clojure.string :as str]
+            [beavr.argument :as arg]
+            [quark.collection.map :as map]))
 
 (def ^:private ^:const terminate "TERMINATE")
 
@@ -15,13 +19,16 @@
          first
          layout/elem-names)))
 
+
+
 (defn raw-suggestions!
   [layouts context field path]
-  (case  field
+  (case field
     nil (mapcat (partial based-on-path path) layouts)
     "<x>" [::number]
     "<y>" [::number]
-    ["lorem" "ipsum" "dolor"]))
+    (-> (sh/source-and-exec "/Users/denis/.config/beavr/nu-ser-curl.sh" (map/map-keys arg/raw context) (str "suggestion::" (arg/raw field)))
+        str/split-lines)))
 
 (defn without-filled-options
   [context suggestions]
@@ -30,7 +37,7 @@
 
 (defn with-terminate-action
   [suggestions]
-  (if (every? layout/dashed? suggestions)
+  (if (every? arg/dashed? suggestions)
     (concat suggestions [terminate])
     suggestions))
 
@@ -43,13 +50,13 @@
 
 (defn with-comments
   [descriptions suggestions]
-  (let [comments (map (partial get descriptions) suggestions)
+  (let [comments   (map (partial get descriptions) suggestions)
         max-length (->> suggestions (map count) (apply max))
-        length (+ max-length 6)
+        length     (+ max-length 6)
         format-str (str "%-" length "s")
-        format #(gstr/format format-str %)]
+        format     #(gstr/format format-str %)]
     (map
-     (fn [suggestion comment]
-       (str (format suggestion) comment))
-     suggestions
-     comments)))
+      (fn [suggestion comment]
+        (str (format suggestion) comment))
+      suggestions
+      comments)))

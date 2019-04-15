@@ -2,7 +2,8 @@
   (:require [beavr.options :as options]
             [beavr.text :as text]
             [clojure.string :as str]
-            [quark.collection.map :as map]))
+            [quark.collection.map :as map]
+            [beavr.argument :as arg]))
 
 (def neodoc (js/require "neodoc"))
 
@@ -10,7 +11,7 @@
   [help-text options-keys]
   (->> options-keys
        (keep (fn [option]
-               (let [txt (options/with-double-dashes option)
+               (let [txt (arg/with-double-dashes option)
                      line (some-> help-text (text/grep txt) last str/trim)
                      description (->> line (re-find #".*?\s{2,}(.*)") last)]
                  [txt description])))

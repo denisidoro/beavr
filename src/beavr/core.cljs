@@ -6,9 +6,13 @@
             [beavr.options :as options]
             [beavr.prompt :as prompt]
             [beavr.suggestions :as suggestions]
+            [beavr.fs :as fs]
             [beavr.text :as text]
             [cljs.nodejs :as nodejs]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [beavr.shell :as sh]
+            [quark.debug :as debug]
+            [beavr.argument :as arg]))
 
 (nodejs/enable-util-print!)
 
@@ -28,10 +32,10 @@
                              (prompt/read! prompt-str)
                              (-> (prompt/fzf! suggestions+ prompt-str)
                                  text/first-column))
-          dashed?          (some-> value layout/dashed?)
+          dashed?          (some-> value arg/dashed?)
           dashed-with-arg? (and dashed?
-                                (-> options (get (options/without-dashes value)) :argument))
-          positional?      (some-> value layout/positional-argument?)
+                                (-> options (get (arg/without-dashes value)) :argument))
+          positional?      (some-> value arg/positional?)
           terminate?       (or (= suggestions/terminate value)
                                (not (some-> value seq)))
           wait-value?      (or positional?
@@ -43,8 +47,19 @@
         field (recur (assoc context field value) nil (conj path value))
         :else (recur context nil (conj path value))))))
 
+(defn parse
+  [cmd]
+  (-> (str (sh/env-var "HOME")
+           "/.config/beavr/"
+           cmd
+           ".sh")
+      fs/slurp
+      (str/replace "##? " "")))
+
 (defn -main []
-  (->> (doc/parse fixtures/docstring)
+  (->> "nu-ser-curl"
+       parse
+       doc/parse
        myloop
        println))
 

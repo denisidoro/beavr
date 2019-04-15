@@ -4,7 +4,8 @@
             [beavr.shell :as sh]
             [beavr.text :as text]
             [clojure.string :as str]
-            [quark.debug :as debug]))
+            [quark.debug :as debug]
+            [beavr.argument :as arg]))
 
 (def ^:private readline-sync (js/require "readline-sync"))
 
@@ -16,8 +17,8 @@
          (map
           (fn [[k v]]
             (if v
-              (str (-> k name options/with-double-dashes) "=" (text/quoted v))
-              (-> k name options/with-double-dashes)))
+              (str (-> k name arg/with-double-dashes) "=" (text/quoted v))
+              (-> k name arg/with-double-dashes)))
           props))))
 
 (defn fzf!
@@ -46,6 +47,4 @@
   (let [result (.question readline-sync (str ansi/light-blue field ansi/reset " "))]
     (.write sh/stdout "\033[1A")
     (.write sh/stdout "\033[2K")
-    ; (.clearLine sh/stdout)
-    ; (.cursorTo sh/stdout 0)
     result))

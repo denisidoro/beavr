@@ -1,6 +1,7 @@
 (ns beavr.layout
   (:require [clojure.string :as str]
-            [quark.collection.seq :as seq]))
+            [quark.collection.seq :as seq]
+            [beavr.argument :as arg]))
 
 (defn elem-name
   [x]
@@ -17,16 +18,6 @@
     "Group" (->> x :branches (seq/mmapcat elem-name))
     []))
 
-(defn positional-argument?
-  [x]
-  (and (string? x)
-       (str/starts-with? x "<")))
-
-(defn dashed?
-  [x]
-  (and (string? x)
-       (str/starts-with? x "-")))
-
 (defn possible?
   [path layout]
   (loop [[p & other-path] path
@@ -36,7 +27,7 @@
         (not p) true
         (not l) false
         (elem-set p) (recur other-path other-layout)
-        (some->> elem-set seq (some positional-argument?)) (recur other-path other-layout)
+        (some->> elem-set seq (some arg/positional?)) (recur other-path other-layout)
         :else false))))
 
 (defn possible-layouts
