@@ -14,3 +14,4 @@ pom.xml.asc
 /.cpcache
 /target
 package-lock.json
+/server.js

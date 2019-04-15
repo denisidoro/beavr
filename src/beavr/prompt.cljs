@@ -45,6 +45,7 @@
   [field]
   (let [result (.question readline-sync (str ansi/light-blue field ansi/reset " "))]
     (.write sh/stdout "\033[1A")
-    (.clearLine sh/stdout)
-    (.cursorTo sh/stdout 0)
+    (.write sh/stdout "\033[2K")
+    ; (.clearLine sh/stdout)
+    ; (.cursorTo sh/stdout 0)
     result))
