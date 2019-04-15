@@ -12,7 +12,7 @@
   },
   "devDependencies": {
     "source-map-support": "^0.4.15",
-    "ws": "^0.8.1"
+    "ws": "^1.1.1"
   },
   "description": "1. `lein figwheel` 2. (In another window) `node target\\js\\compiled\\docli.js ...`",
   "scripts": {
