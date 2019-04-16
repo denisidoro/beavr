@@ -12,7 +12,7 @@
     (str k)))
 
 (defn build-final-cmd
-  [context path]
+  [{:keys [command]} context path]
   (let [path-elems    (map text/quoted path)
         context-elems (->> context (map/filter-keys arg/dashed?) (map context-kv->text))]
-    (str/join " " (concat path-elems context-elems))))
+    (str/join " " (concat [command] path-elems context-elems))))
