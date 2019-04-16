@@ -19,16 +19,24 @@
          first
          layout/elem-names)))
 
-
-
 (defn raw-suggestions!
   [layouts context field path]
   (case field
     nil (mapcat (partial based-on-path path) layouts)
     "<x>" [::number]
     "<y>" [::number]
-    (-> (sh/source-and-exec "/Users/denis/.config/beavr/nu-ser-curl.sh" (map/map-keys arg/raw context) (str "suggestion::" (arg/raw field)))
-        str/split-lines)))
+    (let [file    "/Users/denis/.config/beavr/nu-ser-curl.sh"
+          env     (map/map-keys arg/raw context)
+          cmd     "beavr::suggestion"
+          args    [(arg/raw field)]
+          results (try
+                    (->> (sh/source-and-exec file env cmd args)
+                         str/split-lines
+                         (filter seq))
+                    (catch :default _ []))]
+      (if (some-> results seq)
+        results
+        [::text]))))
 
 (defn without-filled-options
   [context suggestions]
@@ -41,9 +49,19 @@
     (concat suggestions [terminate])
     suggestions))
 
+(defn with-options
+  [options suggestions]
+  (let [option-strs                (->> options keys (map arg/with-double-dashes))
+        has-non-dashed-suggestion? (->> suggestions (remove arg/dashed?) seq)]
+    (if has-non-dashed-suggestion?
+      suggestions
+      (concat suggestions option-strs))))
+
 (defn find-suggestions!
-  [possible-layouts context field path]
+  [possible-layouts options context field path]
   (->> (raw-suggestions! possible-layouts context field path)
+       (filter (some-fn keyword? seq))
+       (with-options options)
        (without-filled-options context)
        set
        with-terminate-action))

@@ -1,6 +1,7 @@
 (ns beavr.shell
   (:require [clojure.string :as str]
-            [quark.debug :as debug]))
+            [quark.debug :as debug]
+            [beavr.text :as text]))
 
 (def ^:private proc (js/require "child_process"))
 (def process (js/require "process"))
@@ -11,6 +12,12 @@
 (defn env-var
   [name]
   (aget env name))
+
+(def home
+  (env-var "HOME"))
+
+(def beavr-home
+  (str home "/.config/beavr"))
 
 (defn sh
   ([cmds]
@@ -25,7 +32,8 @@
          str/trim))))
 
 (defn source-and-exec
-  [file env cmd]
+  [file env cmd args]
   (let [export-str (reduce (fn [s [k v]] (str s " export " k "=" v "; ")) "" env)
-        bash-str (str export-str " source " file "; " cmd ";")]
+        args-str   (->> args (map text/quoted) (str/join " "))
+        bash-str   (str export-str " source " file "; " cmd " " args-str ";")]
     (sh ["bash" "-c" bash-str])))

@@ -1,7 +1,8 @@
 (ns beavr.layout
   (:require [clojure.string :as str]
             [quark.collection.seq :as seq]
-            [beavr.argument :as arg]))
+            [beavr.argument :as arg]
+            [quark.debug :as debug]))
 
 (defn elem-name
   [x]
@@ -20,10 +21,12 @@
 
 (defn possible?
   [path layout]
-  (loop [[p & other-path] path
+  (loop [[p & other-path :as all-path] path
          [l & other-layout] layout]
-    (let [elem-set (some->> l elem-names (keep identity) set)]
+    (let [elem-set    (some->> l elem-names (keep identity) set)
+          empty-name? (-> elem-set first (= ""))]
       (cond
+        empty-name? (recur all-path other-layout)
         (not p) true
         (not l) false
         (elem-set p) (recur other-path other-layout)
