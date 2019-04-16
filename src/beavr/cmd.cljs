@@ -1,6 +1,5 @@
 (ns beavr.cmd
-  (:require [beavr.layout :as layout]
-            [beavr.text :as text]
+  (:require [beavr.text :as text]
             [clojure.string :as str]
             [quark.collection.map :as map]
             [beavr.argument :as arg]))
