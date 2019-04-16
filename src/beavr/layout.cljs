@@ -1,7 +1,7 @@
 (ns beavr.layout
-  (:require [clojure.string :as str]
+  (:require [beavr.argument :as arg]
+            [clojure.string :as str]
             [quark.collection.seq :as seq]
-            [beavr.argument :as arg]
             [quark.debug :as debug]))
 
 (defn elem-name

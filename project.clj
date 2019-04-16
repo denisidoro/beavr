@@ -1,6 +1,6 @@
 (defproject beavr "0.1.0-SNAPSHOT"
-  :description "FIXME: write this!"
-  :url "http://example.com/FIXME"
+  :description "A command-line autocompleter with steroids"
+  :url "https://github.com/denisidoro/beavr"
 
   :min-lein-version "2.7.1"
 

@@ -1,8 +1,8 @@
 (ns beavr.cmd
-  (:require [beavr.text :as text]
+  (:require [beavr.argument :as arg]
+            [beavr.text :as text]
             [clojure.string :as str]
-            [quark.collection.map :as map]
-            [beavr.argument :as arg]))
+            [quark.collection.map :as map]))
 
 (defn ^:private context-kv->text
   [[k v]]

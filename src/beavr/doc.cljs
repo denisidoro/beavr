@@ -1,9 +1,9 @@
 (ns beavr.doc
-  (:require [beavr.options :as options]
+  (:require [beavr.argument :as arg]
+            [beavr.options :as options]
+            [beavr.shell :as sh]
             [beavr.text :as text]
-            [clojure.string :as str]
-            [beavr.argument :as arg]
-            [beavr.shell :as sh]))
+            [clojure.string :as str]))
 
 (def neodoc (js/require "neodoc"))
 
