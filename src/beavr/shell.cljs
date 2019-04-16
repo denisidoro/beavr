@@ -1,7 +1,7 @@
 (ns beavr.shell
-  (:require [clojure.string :as str]
-            [quark.debug :as debug]
-            [beavr.text :as text]))
+  (:require [beavr.text :as text]
+            [clojure.string :as str]
+            [quark.debug :as debug]))
 
 (def ^:private proc (js/require "child_process"))
 (def process (js/require "process"))

@@ -15,3 +15,4 @@ pom.xml.asc
 /target
 package-lock.json
 /server.js
+/bin

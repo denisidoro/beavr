@@ -1,6 +1,6 @@
 (defproject beavr "0.1.0-SNAPSHOT"
-  :description "FIXME: write this!"
-  :url "http://example.com/FIXME"
+  :description "A command-line autocompleter with steroids"
+  :url "https://github.com/denisidoro/beavr"
 
   :min-lein-version "2.7.1"
 
@@ -32,7 +32,7 @@
              {:id "prod"
               :source-paths ["src"]
               :compiler {
-                :output-to "server.js"
+                :output-to "bin/index.js"
                 :output-dir "target/js/compiled/prod"
                 :target :nodejs
                 :optimizations :simple}}]}

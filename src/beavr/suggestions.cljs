@@ -1,11 +1,11 @@
 (ns beavr.suggestions
-  (:require [beavr.layout :as layout]
+  (:require [beavr.argument :as arg]
+            [beavr.layout :as layout]
+            [beavr.shell :as sh]
             [beavr.text :as text]
+            [clojure.string :as str]
             [goog.string :as gstr]
             [goog.string.format]
-            [beavr.shell :as sh]
-            [clojure.string :as str]
-            [beavr.argument :as arg]
             [quark.collection.map :as map]))
 
 (def ^:private ^:const terminate "TERMINATE")
@@ -71,7 +71,7 @@
         format-str (str "%-" length "s")
         format     #(gstr/format format-str %)]
     (map
-      (fn [suggestion comment]
-        (str (format suggestion) comment))
-      suggestions
-      comments)))
+     (fn [suggestion comment]
+       (str (format suggestion) comment))
+     suggestions
+     comments)))

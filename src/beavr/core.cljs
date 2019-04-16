@@ -1,12 +1,12 @@
 (ns beavr.core
-  (:require [beavr.cmd :as cmd]
+  (:require [beavr.argument :as arg]
+            [beavr.cmd :as cmd]
             [beavr.doc :as doc]
             [beavr.layout :as layout]
             [beavr.prompt :as prompt]
             [beavr.suggestions :as suggestions]
             [beavr.text :as text]
             [cljs.nodejs :as nodejs]
-            [beavr.argument :as arg]
             [clojure.string :as str]))
 
 (nodejs/enable-util-print!)

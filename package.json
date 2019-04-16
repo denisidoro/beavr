@@ -1,11 +1,27 @@
 {
   "name": "beavr",
+  "description": "A command-line autocompleter with steroids",
   "version": "0.1.0",
-  "private": "true",
+  "author": "Denis Isidoro",
+  "repository": "https://github.com/denisidoro/beavr.git",
+  "license": "Apache 2.0",
   "engines": {
-    "node": "6.x"
+    "node": ">=0.9.0"
   },
-  "main": "server.js",
+  "main": "bin/index.js",
+  "preferGlobal": true,
+  "bin": {
+    "beavr": "bin/index.js"
+  },
+  "keywords": [
+    "cli",
+    "autocomplete",
+    "fzf",
+    "clojurescript"
+  ],
+  "files": [
+    "bin"
+  ],
   "dependencies": {
     "neodoc": "^2.0.2",
     "readline-sync": "^1.4.9"
@@ -13,11 +29,5 @@
   "devDependencies": {
     "source-map-support": "^0.4.15",
     "ws": "^1.1.1"
-  },
-  "description": "1. `lein figwheel` 2. (In another window) `node target\\js\\compiled\\docli.js ...`",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC"
+  }
 }
