@@ -32,7 +32,7 @@
              {:id "prod"
               :source-paths ["src"]
               :compiler {
-                :output-to "server.js"
+                :output-to "bin/index.js"
                 :output-dir "target/js/compiled/prod"
                 :target :nodejs
                 :optimizations :simple}}]}
