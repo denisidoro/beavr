@@ -17,7 +17,7 @@
          field   nil
          path    []]
     (let [possible-layouts (layout/possible-layouts layouts path)
-          suggestions      (suggestions/find-suggestions! possible-layouts options context field path)
+          suggestions      (suggestions/find-suggestions! doc possible-layouts context field path)
           prompt-str       (some-> field text/first-column)
           free-input?      (-> suggestions first keyword?)
           suggestions+     (when-not free-input?

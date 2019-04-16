@@ -40,6 +40,7 @@
     {:layouts       layouts+
      :options       options
      :docstring     docstring
+     :doc-path      doc-sh
      :command       cmd
      :kebab-command cmd-str
      :descriptions  (find-descriptions helpText options-keys)}))

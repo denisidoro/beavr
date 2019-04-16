@@ -3,7 +3,6 @@
             [beavr.text :as text]
             [goog.string :as gstr]
             [goog.string.format]
-            [quark.debug :as debug]
             [beavr.shell :as sh]
             [clojure.string :as str]
             [beavr.argument :as arg]
@@ -20,12 +19,10 @@
          layout/elem-names)))
 
 (defn raw-suggestions!
-  [layouts context field path]
+  [layouts doc-path context field path]
   (case field
     nil (mapcat (partial based-on-path path) layouts)
-    "<x>" [::number]
-    "<y>" [::number]
-    (let [file    "/Users/denis/.config/beavr/nu-ser-curl.sh"
+    (let [file    doc-path
           env     (map/map-keys arg/raw context)
           cmd     "beavr::suggestion"
           args    [(arg/raw field)]
@@ -58,8 +55,8 @@
       (concat suggestions option-strs))))
 
 (defn find-suggestions!
-  [possible-layouts options context field path]
-  (->> (raw-suggestions! possible-layouts context field path)
+  [{:keys [options doc-path]} possible-layouts context field path]
+  (->> (raw-suggestions! possible-layouts doc-path context field path)
        (filter (some-fn keyword? seq))
        (with-options options)
        (without-filled-options context)
