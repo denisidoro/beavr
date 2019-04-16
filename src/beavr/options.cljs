@@ -2,27 +2,25 @@
   (:require [beavr.text :as text]
             [clojure.string :as str]
             [clojure.walk :as walk]
-            [quark.collection.map :as map]))
+            [quark.collection.map :as map]
+            [beavr.argument :as arg]))
 
-(defn all
+(defn from-layout
   [layouts]
   (let [opts (atom [])]
     (walk/prewalk
-     (fn [layout]
-       (when (some-> layout :type (= "Option"))
-         (swap! opts conj layout))
-       layout)
-     layouts)
+      (fn [layout]
+        (when (some-> layout :type (= "Option"))
+          (swap! opts conj layout))
+        layout)
+      layouts)
     (->> @opts
          set
          (map (fn [{:keys [name] :as o}] [name o]))
          (into {}))))
 
-(defn with-double-dashes
-  [x]
-  (str "--" x))
-
-(defn without-dashes
-  [x]
-  (str/replace x #"\-" ""))
-
+(defn from-descriptions
+  [descriptions]
+  (->> descriptions
+       (map (fn [description] [(-> description :aliases last arg/without-dashes) description]))
+       (into {})))

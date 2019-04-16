@@ -1,26 +1,24 @@
 (ns beavr.core
   (:require [beavr.cmd :as cmd]
             [beavr.doc :as doc]
-            [beavr.fixtures :as fixtures]
             [beavr.layout :as layout]
-            [beavr.options :as options]
             [beavr.prompt :as prompt]
             [beavr.suggestions :as suggestions]
             [beavr.text :as text]
             [cljs.nodejs :as nodejs]
+            [beavr.argument :as arg]
             [clojure.string :as str]))
 
 (nodejs/enable-util-print!)
 
-(defn myloop
-  [{:keys [layouts options descriptions]}]
+(defn input-loop
+  [{:keys [layouts options descriptions] :as doc}]
   (loop [context {}
          field   nil
          path    []]
     (let [possible-layouts (layout/possible-layouts layouts path)
-          suggestions      (suggestions/find-suggestions! possible-layouts context field path)
+          suggestions      (suggestions/find-suggestions! doc possible-layouts context field path)
           prompt-str       (some-> field text/first-column)
-          header           (str/join " " path)
           free-input?      (-> suggestions first keyword?)
           suggestions+     (when-not free-input?
                              (suggestions/with-comments descriptions suggestions))
@@ -28,24 +26,28 @@
                              (prompt/read! prompt-str)
                              (-> (prompt/fzf! suggestions+ prompt-str)
                                  text/first-column))
-          dashed?          (some-> value layout/dashed?)
-          dashed-with-arg? (and dashed?
-                                (-> options (get (options/without-dashes value)) :argument))
-          positional?      (some-> value layout/positional-argument?)
+          dashed-value?    (some-> value arg/dashed?)
+          dashed-field?    (some-> field arg/dashed?)
+          dashed-with-arg? (and dashed-value?
+                                (-> options (get (arg/without-dashes value)) :argument))
+          positional?      (some-> value arg/positional?)
           terminate?       (or (= suggestions/terminate value)
                                (not (some-> value seq)))
           wait-value?      (or positional?
-                               (and dashed? dashed-with-arg?))]
+                               (and dashed-value? dashed-with-arg?))]
       (cond
-        terminate? (cmd/build-final-cmd context path)
+        terminate? (cmd/build-final-cmd doc context path)
+        dashed-field? (recur (assoc context field value) nil path)
         wait-value? (recur context value path)
-        dashed? (recur (assoc context value nil) nil path)
+        dashed-value? (recur (assoc context value nil) nil path)
         field (recur (assoc context field value) nil (conj path value))
         :else (recur context nil (conj path value))))))
 
-(defn -main []
-  (->> (doc/parse fixtures/docstring)
-       myloop
+(defn -main
+  [& args]
+  (->> (str/join " " args)
+       doc/parse!
+       input-loop
        println))
 
 (set! *main-cli-fn* -main)

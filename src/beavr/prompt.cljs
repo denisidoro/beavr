@@ -4,21 +4,22 @@
             [beavr.shell :as sh]
             [beavr.text :as text]
             [clojure.string :as str]
-            [quark.debug :as debug]))
+            [quark.debug :as debug]
+            [beavr.argument :as arg]))
 
 (def ^:private readline-sync (js/require "readline-sync"))
 
 (defn command-str
   [script props]
   (str/join
-   " "
-   (into [script]
-         (map
-          (fn [[k v]]
-            (if v
-              (str (-> k name options/with-double-dashes) "=" (text/quoted v))
-              (-> k name options/with-double-dashes)))
-          props))))
+    " "
+    (into [script]
+          (map
+            (fn [[k v]]
+              (if v
+                (str (-> k name arg/with-double-dashes) "=" (text/quoted v))
+                (-> k name arg/with-double-dashes)))
+            props))))
 
 (defn fzf!
   [coll field]
@@ -31,14 +32,15 @@
 
     :else
     (let [prompt-str (text/with-leading-space field)
-          props {:height 10
-                 :prompt prompt-str
-                  ; :header header
-                 :reverse nil
-                 :inline-info nil}
-          fzf (command-str "fzf" props)
-          cmd (str "echo \"" (str/join "\n" coll) "\" | " fzf)
-          opts #js {:stdio #js ["inherit" "pipe" "inherit"] :shell true}]
+          props      {:height      10
+                      :prompt      prompt-str
+                      ; :header header
+                      :no-sort     nil
+                      :reverse     nil
+                      :inline-info nil}
+          fzf        (command-str "fzf" props)
+          cmd        (str "echo \"" (str/join "\n" coll) "\" | " fzf)
+          opts       #js {:stdio #js ["inherit" "pipe" "inherit"] :shell true}]
       (sh/sh cmd opts))))
 
 (defn read!
@@ -46,6 +48,4 @@
   (let [result (.question readline-sync (str ansi/light-blue field ansi/reset " "))]
     (.write sh/stdout "\033[1A")
     (.write sh/stdout "\033[2K")
-    ; (.clearLine sh/stdout)
-    ; (.cursorTo sh/stdout 0)
     result))
