@@ -54,6 +54,7 @@ workflows:
   build:
     jobs:
       - deps
+      - packages
       - build:
           requires:
             - deps
