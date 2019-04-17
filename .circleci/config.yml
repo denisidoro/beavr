@@ -47,6 +47,7 @@ jobs:
       - restore_cache:
           keys:
           - deps-{{ checksum "project.clj" }}
+          - packages-{{ checksum "package.json" }}
       - run: lein doo node test once
 
 workflows:
