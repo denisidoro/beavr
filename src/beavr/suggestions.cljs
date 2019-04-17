@@ -8,7 +8,7 @@
             [goog.string.format]
             [quark.collection.map :as map]))
 
-(def ^:private ^:const terminate "TERMINATE")
+(def ^:const terminate "TERMINATE")
 
 (defn based-on-path
   [path layout]

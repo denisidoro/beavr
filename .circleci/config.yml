@@ -27,6 +27,19 @@ jobs:
             - ~/.m2
           key: deps-{{ checksum "project.clj" }}
 
+  packages:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - packages-{{ checksum "package.json" }}
+      - run: npm install
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: packages-{{ checksum "package.json" }}
+
   build:
     <<: *defaults
     steps:
@@ -44,3 +57,4 @@ workflows:
       - build:
           requires:
             - deps
+            - packages
