@@ -1,7 +1,7 @@
 {
   "name": "beavr",
   "description": "A command-line autocompleter with steroids",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "author": "Denis Isidoro",
   "repository": "https://github.com/denisidoro/beavr.git",
   "license": "Apache 2.0",
