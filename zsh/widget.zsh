@@ -1,6 +1,6 @@
 function _beavr_suggestion {
     zle kill-whole-line
-    zle -U "$(node "beavr" "$(echo "$CUTBUFFER" | xargs)")"
+    zle -U "$("beavr" "$(echo "$CUTBUFFER" | xargs)")"
     zle accept-line
 }
 
