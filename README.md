@@ -35,7 +35,7 @@ npm install -g beavr
 
 It's planned for beavr to ship with some command specs and, in case the command isn't available, beaver should infer the spec given the command's `--help` content. 
 
-In the meantime, you must define a `<your-cmd>.sh` in `$HOME/.config/beavr/` such as in [these examples](https://github.com/denisidoro/beavr/tree/master/docs):
+In the meantime, you must define a `<your-cmd>.sh` in `$HOME/.config/beavr/` such as in [these examples](https://github.com/denisidoro/beavr/tree/master/specs):
 
 ```bash
 beavr::help() {
@@ -58,7 +58,7 @@ As of now, they must conform to [neodoc](https://github.com/felixSchl/neodoc)/[d
 
 ## ZSH widget
 
-Simply source [this file](https://github.com/denisidoro/beavr/blob/master/zsh/widget.zsh) in your `.zshrc`.
+Simply source [this file](https://github.com/denisidoro/beavr/blob/master/shell/widget.zsh) in your `.zshrc`.
 
 By default, the widget is trigged by `Alt + G`.
 

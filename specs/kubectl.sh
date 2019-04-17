@@ -4,8 +4,8 @@ beavr::help() {
   echo "kubectl controls the Kubernetes cluster manager
 
 Usage:
-  kctl get <resource>
-  kctl describe <resource> <id>"
+  kubectl get <resource>
+  kubectl describe <resource> <id>"
 }
 
 beavr::suggestion() {
