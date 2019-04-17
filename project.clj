@@ -1,4 +1,4 @@
-(defproject beavr "0.1.2-SNAPSHOT"
+(defproject beavr "0.1.3-SNAPSHOT"
   :description "A command-line autocompleter with steroids"
   :url "https://github.com/denisidoro/beavr"
 
