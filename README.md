@@ -7,13 +7,13 @@
 
 A command-line autocompleter with steroids. :muscle:
 
-Based on the desired command spec, beavr suggests arguments and flags. Options can be selected with [fzf](https://github.com/junegunn/fzf), a fuzzy-finder.
+Based on the desired command spec, beavr suggests arguments and flags. Suggestions can be selected with [fzf](https://github.com/junegunn/fzf), a fuzzy-finder.
 
 ![Demo](https://user-images.githubusercontent.com/3226564/56243794-d6091080-6071-11e9-8940-9b4c79e66a4e.gif)
 
 The main objectives are:
 - to increase discoverability, by showing all possible actions you can take;
-- to prevent you from running auxiliar commands, copying the result into the clipboard and then pasting into the original command
+- to prevent you from running auxiliar commands, copying the result into the clipboard and then pasting into the original command;
 - to improve terminal usage as a whole.
 
 Sure, you can find autocompleters out there for all your favorite commands.
@@ -27,7 +27,7 @@ beavr, on the other hand, intends to be a general purpose platform for speccing 
 
 ```bash
 brew install fzf # or equivalent
-npm install beavr
+npm install -g beavr
 ```
 
 
@@ -41,8 +41,8 @@ In the meantime, you must define a `<your-cmd>.sh` in `$HOME/.config/beavr/` suc
 beavr::help() {
   echo "kubectl controls the Kubernetes cluster manager
 Usage:
-  kctl get <resource>
-  kctl describe <resource> <id>"
+  kubectl get <resource>
+  kubectl describe <resource> <id>"
 }
 
 beavr::suggestion() {
@@ -86,4 +86,4 @@ Command-line call builder > builder > [beaver](https://en.wikipedia.org/wiki/Bea
 
 ## Icon
 
-Icon made by [Freepik](https://www.freepik.com) from [flaticon](https://www.flaticon.com) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/).
+Icon made by [Freepik](https://www.freepik.com) from [flaticon](https://www.flaticon.com), licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/).
