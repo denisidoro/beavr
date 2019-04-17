@@ -21,7 +21,7 @@
 
 (defn sh
   ([cmds]
-   (sh cmds #js {:cwd "/Users/denis" :env env :terminal true}))
+   (sh cmds #js {:cwd home :env env :terminal true}))
   ([cmds opts]
    (let [[cmd & args] (if (string? cmds) [cmds] cmds)]
      (-> proc
