@@ -17,7 +17,8 @@
     "cli",
     "autocomplete",
     "fzf",
-    "clojurescript"
+    "clojurescript",
+    "prompt"
   ],
   "files": [
     "bin"
