@@ -27,6 +27,7 @@
     "readline-sync": "^1.4.9"
   },
   "devDependencies": {
+    "@cljs-oss/module-deps": "^1.1.1",
     "source-map-support": "^0.4.15",
     "ws": "^1.1.1"
   }
