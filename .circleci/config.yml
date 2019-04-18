@@ -50,6 +50,8 @@ jobs:
       - restore_cache:
           keys:
           - deps-{{ checksum "project.clj" }}
+      - restore_cache:
+          keys:
           - npm-{{ checksum "package.json" }}
       - run: pwd
       - run: ls
