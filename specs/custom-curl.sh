@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
-source "$DIR/work.sh"
 
 beavr::help() {
   echo "Command for calling an arbitrary URL from a service
@@ -19,7 +17,16 @@ beavr::suggestion() {
     "prototype") echo "s0 s1 s2 s3 global" | tr ' ' '\n';;
     "--env") echo "staging prod" | tr ' ' '\n';;
     "--format") echo "xml json yaml edn transit" | tr ' ' '\n';;
-    "service") work services;;
-    "path") work routes "$service" | column -ts ',';;
+    "service") _work services;;
+    "path") _work routes "$service" | column -ts ',';;
+  esac
+}
+
+_work() {
+  local readonly domain="$1"
+  shift
+  case $domain in 
+    "services") echo "customer cart warehouse geo finance" | tr ' ' '\n';;
+    "routes") echo -e "/api/carts/:id,Get cart for a given ID\n/api/customers/:id/carts,Get cart for a given customer ID\n/api/version,Get service git commit hash";;
   esac
 }
