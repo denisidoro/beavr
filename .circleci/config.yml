@@ -1,0 +1,69 @@
+# Clojure CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-clojure/ for more details
+
+version: 2
+
+job_defaults: &defaults
+    docker:
+      - image: circleci/clojure:lein-2.8.3-node-browsers-legacy 
+    working_directory: ~/repo
+    environment:
+      LEIN_ROOT: "true"
+      JVM_OPTS: "-Xmx3600m"
+      ENVIRONMENT: "test"
+
+jobs:
+  deps:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - deps-{{ checksum "project.clj" }}
+      - run: lein deps
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: deps-{{ checksum "project.clj" }}
+
+  packages:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - npm-{{ checksum "package.json" }}
+      - run: pwd
+      - run: ls
+      - run: npm install
+      - run: ls
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: npm-{{ checksum "package.json" }}
+
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - deps-{{ checksum "project.clj" }}
+      - restore_cache:
+          keys:
+          - npm-{{ checksum "package.json" }}
+      - run: pwd
+      - run: ls
+      - run: lein doo node test once
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - deps
+      - packages
+      - build:
+          requires:
+            - deps
+            - packages
