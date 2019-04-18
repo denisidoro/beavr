@@ -34,7 +34,10 @@ jobs:
       - restore_cache:
           keys:
           - npm-{{ checksum "package.json" }}
+      - run: pwd
+      - run: ls
       - run: npm install
+      - run: ls
       - save_cache:
           paths:
             - ./node_modules
@@ -48,6 +51,8 @@ jobs:
           keys:
           - deps-{{ checksum "project.clj" }}
           - npm-{{ checksum "package.json" }}
+      - run: pwd
+      - run: ls
       - run: lein doo node test once
 
 workflows:
