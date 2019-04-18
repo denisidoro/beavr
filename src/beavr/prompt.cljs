@@ -1,44 +1,48 @@
 (ns beavr.prompt
   (:require [beavr.ansi :as ansi]
             [beavr.argument :as arg]
-            [beavr.options :as options]
             [beavr.shell :as sh]
             [beavr.text :as text]
-            [clojure.string :as str]
-            [quark.debug :as debug]))
+            [clojure.string :as str]))
 
 (def ^:private readline-sync (js/require "readline-sync"))
 
 (defn command-str
   [script props]
   (str/join
-   " "
-   (into [script]
-         (map
-          (fn [[k v]]
-            (if v
-              (str (-> k name arg/with-double-dashes) "=" (text/quoted v))
-              (-> k name arg/with-double-dashes)))
-          props))))
+    " "
+    (into [script]
+          (map
+            (fn [[k v]]
+              (if v
+                (str (-> k name arg/with-double-dashes) "=" (text/quoted v))
+                (-> k name arg/with-double-dashes)))
+            props))))
 
-(defn fzf!
-  [coll field]
+(defn skip-input?
+  [coll]
+  (= 1 (count coll)))
+
+(defn select!
+  [coll field props]
   (cond
     (not (some-> coll seq))
     nil
 
-    (= 1 (count coll))
+    (skip-input? coll)
     (first coll)
 
     :else
     (let [prompt-str (text/with-leading-space field)
-          props      {:height      10
-                      :prompt      prompt-str
-                      ; :header header
-                      :no-sort     nil
-                      :reverse     nil
-                      :inline-info nil}
-          fzf        (command-str "fzf" props)
+          props+     (merge
+                       {:height      10
+                        :prompt      prompt-str
+                        ; :header header
+                        :no-sort     nil
+                        :reverse     nil
+                        :inline-info nil}
+                       props)
+          fzf        (command-str "fzf" props+)
           cmd        (str "echo \"" (str/join "\n" coll) "\" | " fzf)
           opts       #js {:stdio #js ["inherit" "pipe" "inherit"] :shell true}]
       (sh/sh cmd opts))))
