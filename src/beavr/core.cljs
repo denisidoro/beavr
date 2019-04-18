@@ -12,20 +12,26 @@
 (nodejs/enable-util-print!)
 
 (defn input-loop
-  [{:keys [layouts options descriptions] :as doc}]
+  [inputs
+   {:keys [layouts options descriptions] :as doc}]
   (loop [context {}
          field   nil
-         path    []]
+         path    []
+         [first-input & remaining-inputs :as all-inputs] inputs]
     (let [possible-layouts (layout/possible-layouts layouts path)
           suggestions      (suggestions/find-suggestions! doc possible-layouts context field path)
           prompt-str       (some-> field text/first-column)
           free-input?      (-> suggestions first keyword?)
           suggestions+     (when-not free-input?
                              (suggestions/with-comments descriptions suggestions))
-          value            (if free-input?
-                             (prompt/read! prompt-str)
-                             (-> (prompt/fzf! suggestions+ prompt-str)
-                                 text/first-column))
+          require-input?   (not (prompt/skip-input? suggestions+))
+          input            (when require-input? first-input)
+          next-inputs      (if input remaining-inputs all-inputs)
+          fzf-props        (if input {:filter input} {})
+          value            (if (or input (not free-input?))
+                             (-> (prompt/select! suggestions+ prompt-str fzf-props)
+                                 text/first-column)
+                             (prompt/read! prompt-str))
           dashed-value?    (some-> value arg/dashed?)
           dashed-field?    (some-> field arg/dashed?)
           dashed-with-arg? (and dashed-value?
@@ -37,17 +43,17 @@
                                (and dashed-value? dashed-with-arg?))]
       (cond
         terminate? (cmd/build-final-cmd doc context path)
-        dashed-field? (recur (assoc context field value) nil path)
-        wait-value? (recur context value path)
-        dashed-value? (recur (assoc context value nil) nil path)
-        field (recur (assoc context field value) nil (conj path value))
-        :else (recur context nil (conj path value))))))
+        dashed-field? (recur (assoc context field value) nil path next-inputs)
+        wait-value? (recur context value path next-inputs)
+        dashed-value? (recur (assoc context value nil) nil path next-inputs)
+        field (recur (assoc context field value) nil (conj path value) next-inputs)
+        :else (recur context nil (conj path value) next-inputs)))))
 
 (defn -main
   [& args]
   (->> (str/join " " args)
        doc/parse!
-       input-loop
+       (input-loop [])
        println))
 
 (set! *main-cli-fn* -main)
