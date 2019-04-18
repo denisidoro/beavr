@@ -3,6 +3,8 @@
 
 [![npm](https://badge.fury.io/js/beavr.svg)](https://badge.fury.io/js/beavr)
 
+[![CircleCI](https://circleci.com/gh/denisidoro/beavr.svg?style=svg)](https://circleci.com/gh/denisidoro/beavr)
+
 <img src="https://user-images.githubusercontent.com/3226564/56245772-95f85c80-6076-11e9-9f86-054231221e1f.png" align="right" />
 
 A command-line autocompleter with steroids. :muscle:
