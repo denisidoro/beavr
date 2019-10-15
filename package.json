@@ -30,6 +30,6 @@
   "devDependencies": {
     "@cljs-oss/module-deps": "^1.1.1",
     "source-map-support": "^0.4.15",
-    "ws": "^1.1.1"
+    "ws": "^7.1.2"
   }
 }
