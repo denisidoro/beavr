@@ -12,6 +12,8 @@ Based on the desired command spec, beavr suggests arguments and flags. Suggestio
 
 ![Demo](https://user-images.githubusercontent.com/3226564/56243794-d6091080-6071-11e9-8940-9b4c79e66a4e.gif)
 
+:warning: If you're interested in this project you will probably like [navi](https://github.com/denisidoro/navi)!
+
 The main objectives are:
 - to increase discoverability, by showing all possible actions you can take;
 - to prevent you from running auxiliar commands, copying the result into the clipboard and then pasting into the original command;
